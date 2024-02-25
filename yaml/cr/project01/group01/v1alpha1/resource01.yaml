@@ -1,0 +1,9 @@
+---
+apiVersion: group01.project01.com/v1alpha1
+kind: Resource01
+metadata:
+  name: resource01-01
+  namespace: default
+spec:
+ field01: 1
+ field02: test

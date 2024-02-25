@@ -1,0 +1,80 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubernetes-operator
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - "group01.project01.com"
+  resources:
+  - resource01s
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - "monitoring.coreos.com"
+  resources:
+  - servicemonitors
+  verbs:
+  - list
+  - watch
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kubernetes-operator
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-operator
+  namespace: default
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: kubernetes-operator
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubernetes-operator
+  namespace: default
+
+---
+apiVersion: apps/v1
+#kind: Deployment
+kind: StatefulSet
+metadata:
+  name: kubernetes-operator
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-operator
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: kubernetes-operator
+    spec:
+      serviceAccountName: kubernetes-operator
+      containers:
+      - name: kubernetes-operator
+        image: 192.168.16.70:5000/test:0.0.0.1
+        imagePullPolicy: Always
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - key: node.kubernetes.io/not-ready
+        operator: Exists
+        effect: NoSchedule

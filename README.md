@@ -1,1 +1,171 @@
 # kubernetes-operator
+
+## How to add a CRD
+ - Premise
+   - lower case
+     - `${group-name}'
+	 - '${version}'
+	 - '${resource-name}`
+   - [Capitalization](https://en.wikipedia.org/wiki/Capitalization)
+     - `${Group-name}'
+	 - '${Version}'
+	 - '${Resource-name}`
+ - CRD Definition
+   - create folder
+     - `mkdir -p kubernetes-operator/yaml/crd/${project-name}/${group-name}/${version}/`
+   - copy sample
+     - `cp kubernetes-operator/yaml/crd/project01/group01/v1alpha1/resource01.yaml kubernetes-operator/yaml/crd/${project-name}/${group-name}/${version}/${resource-name}.yaml`
+   - edit content
+     - change project01 to ${project-name}
+     - change group01 to ${group-name}
+	 - change v1alpha1 to ${version}
+     - change resource01 to ${resource-name}
+     - change Resource01 to ${Resource-name}
+     - modify schema
+ - api
+   - New project
+     - create folder
+       - `mkdir -p kubernetes-operator/api/${project-name}/${group-name}/${version}/`
+     - register.go
+       - copy sample
+         - `cp kubernetes-operator/api/project01/group01/v1alpha1/register.go kubernetes-operator/api/${project-name}/${group-name}/${version}/register.go`
+       - edit content
+         - change v1alpha1 to ${version}
+		 - change group01.project01.com to ${group-name}.${project-name}.com
+     - types.go
+       - copy sample
+         - `cp kubernetes-operator/api/project01/group01/v1alpha1/resource01-types.go kubernetes-operator/api/${project-name}/${group-name}/${version}/${resource-name}-types.go`
+       - edit content
+         - change v1alpha1 to ${version}
+         - change Resource01 to ${Resource-name} and modify ${Resource-name}Spec structure
+     - deepcopy.go 
+       - copy sample
+         - `cp kubernetes-operator/api/project01/group01/v1alpha1/resource01-deepcopy.go kubernetes-operator/api/${project-name}/${group-name}/${version}/${resource-name}-deepcopy.go`
+       - edit content
+         - change v1alpha1 to ${version}
+         - change Resource01 to ${Resource-name} and modify DeepCopyObject()
+ - client
+   - New project
+     - create folder
+       - `mkdir -p kubernetes-operator/client/${project-name}/clientset/`
+       - `mkdir -p kubernetes-operator/client/${project-name}/informers/internalinterfaces/`
+       - `mkdir -p kubernetes-operator/client/${project-name}/informers/${group-name}/${version}/`
+	   - `mkdir -p kubernetes-operator/client/${project-name}/listers/${group-name}/${version}/`
+       - `mkdir -p kubernetes-operator/client/${project-name}/scheme/`
+       - `mkdir -p kubernetes-operator/client/${project-name}/typed/${group-name}/${version}/`
+	 - clientset
+       - copy sample
+	     - `cp kubernetes-operator/client/project01/clientset/clientset.go kubernetes-operator/client/${project-name}/clientset/clientset.go`
+	   - edit content
+	     - change project01 to ${project-name}
+	     - change group01 to ${group-name}
+	     - change Group01 to ${Group-name}
+		 - change v1alpha1 to ${version}
+		 - change V1alpha1 to ${Version}
+	 - informers
+	   - factory.go
+         - copy sample
+	       - `cp kubernetes-operator/client/project01/informers/factory.go kubernetes-operator/client/${project-name}/informers/factory.go`
+	     - edit content
+	       - change project01 to ${project-name}
+	       - change group01 to ${group-name}
+	       - change Group01 to ${Group-name}
+	   - generic.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/informers/generic.go kubernetes-operator/client/project01/informers/generic.go`
+	     - edit content
+		   - change group01V1alpha1 to ${group-name}${Version}
+		   - change project01/group01/v1alpha1 to ${project-name}/${group-name}/${version}
+		   - change Group01 to ${Group-name}
+		   - change resource01s to ${resource-name}s
+		   - change Group01().V1alpha1().Resource01s() to ${Group-name}().${Version}().${Resource-name}s()
+	   - interface.go for group
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/informers/group01/interface.go kubernetes-operator/client/${project-name}/informers/${group-name}/interface.go`
+	     - edit content
+	       - change project01 to ${project-name}
+	       - change group01 to ${group-name}
+	       - change Group01 to ${Group-name}
+		   - change v1alpha1 to ${version}
+		   - change V1alpha1 to ${Version}
+	   - interface.go for version
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/informers/group01/v1alpha1/interface.go kubernetes-operator/client/${project-name}/informers/${group-name}/${version}/interface.go`
+	     - edit content
+	       - change project01 to ${project-name}
+		   - change v1alpha1 to ${version}
+		   - change resource01 to ${resource-name}
+		   - change Resource01 to ${Resource-name}
+	   - resource.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/informers/group01/v1alpha1/resource01.go kubernetes-operator/client/${project-name}/informers/${group-name}/${version}/${resource-name}.go`
+	     - edit content
+	       - change project01 to ${project-name}
+	       - change group01 to ${group-name}
+	       - change Group01 to ${Group-name}
+		   - change v1alpha1 to ${version}
+		   - change V1alpha1 to ${Version}
+	   - factory_interfaces.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/informers/internalinterfaces/factory_interfaces.go kubernetes-operator/client/${project-name}/informers/internalinterfaces/factory_interfaces.go'
+	     - edit content
+	       - change project01 to ${project-name}
+	 - listers
+	   - expansion.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/listers/group01/v1alpha1/resource01-expansion.go kubernetes-operator/client/${project-name}/listers/${group-name}/${version}/${resource-name}-expansion.go`
+	     - edit content
+		   - change Resource01 to ${Resource-name}
+		   - change v1alpha1 to ${version}
+	   - resource.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/listers/group01/v1alpha1/resource01.go kubernetes-operator/client/${project-name}/listers/${group-name}/${version}/${resource-name}.go`
+	     - edit content
+	       - change project01 to ${project-name}
+	       - change group01 to ${group-name}
+		   - change v1alpha1 to ${version}
+		   - change resource01 to ${resource-name}
+		   - change Resource01 to ${Resource-name}
+	 - scheme
+	   - register.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/scheme/register.go kubernetes-operator/client/${project-name}/scheme/register.go`
+	     - edit content
+	       - change project01 to ${project-name}
+	       - change group01 to ${group-name}
+		   - change v1alpha1 to ${version}
+		   - change V1alpha1 to ${Version}
+	 - typed
+	   - client.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/typed/group01/v1alpha1/client.go kubernetes-operator/client/${project-name}/typed/${group-name}/${version}/client.go`
+	     - edit content
+	       - change project01 to ${project-name}
+	       - change group01 to ${group-name}
+	       - change Group01 to ${Group-name}
+		   - change v1alpha1 to ${version}
+		   - change V1alpha1 to ${Version}
+		   - change Resource01 to ${Resource-name}
+	   - expansion.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/typed/group01/v1alpha1/resource01-expansion.go kubernetes-operator/client/${project-name}/typed/${group-name}/${version}/${resource-name}-expansion.go`
+	     - edit content
+		   - change v1alpha1 to ${version}
+		   - change Resource01 to ${Resource-name}
+	   - resource.go
+         - copy sample
+		   - `cp kubernetes-operator/client/project01/typed/group01/v1alpha1/resource01.go kubernetes-operator/client/${project-name}/typed/${group-name}/${version}/${resource-name}.go`
+	     - edit content
+	       - change project01 to ${project-name}
+	       - change group01 to ${group-name}
+	       - change Group01 to ${Group-name}
+		   - change v1alpha1 to ${version}
+		   - change V1alpha1 to ${Version}
+		   - change Resource01 to ${Resource-name}
+
+<br/>
+
+## Reference
+ - [client-go](https://github.com/kubernetes/client-go)
+ - [api](https://github.com/kubernetes/api)
+ - [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator)
